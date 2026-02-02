@@ -7,6 +7,7 @@ import requests,psutil,time,signal,sys,urllib
 
 
 API_KEY='U2LDYJQ1ATAV89X7'
+CHANNEL_NAME='ergCanal'
 channel_id= None
 write_key= None
 
@@ -20,31 +21,27 @@ def cpu_ram():
     ram= psutil.virtual_memory().percent
     print("CPU: %" + str(cpu) + "\tRAM: %" + str(ram))
     time.sleep(5)
-
-def send_petition(method, uri, headers=None, cuerpo=None, params=None, allow_red=False):
-    return requests.request(method, uri, headers=headers, data=cuerpo, params=params, allow_redirects=allow_red)
+    return cpu, ram
 
 def check_channel():
     method= 'GET'
     uri= 'https://api.thingspeak.com/channels.json'
     headers= {'Host': 'api.thingspeak.com',
               'Content-Type': 'application/x-www-form-urlencoded'}
-    cuerpo={'api_key': API_KEY,
-            'tag': 'ergCanal'}
+    cuerpo={'api_key': API_KEY}
 
+    response = requests.request(method, uri, headers=headers, data=cuerpo)
+    canales=response.json()
 
-    response= send_petition(method, uri, cuerpo)
-    print(response.content)
-
-    if response.content:
-        return True
-    else:
-        return False
+    for canal in canales:
+        if canal.get('name') == CHANNEL_NAME:
+            return True
+    return False
 
 def create_channel():
 
     if check_channel():
-        print('[!] El canal ya existe por lo que no se creará\r\n[!] Saliendo...\n')
+        print(f'[!] El canal {CHANNEL_NAME} ya existe por lo que no se creará\r\n[!] Saliendo...\n')
         sys.exit(0)
 
     global channel_id
@@ -58,7 +55,7 @@ def create_channel():
               'Content-Type': 'application/x-www-form-urlencoded'}
 
     cuerpo= {'api_key': API_KEY,
-              'name': 'ergCanal',
+              'name': CHANNEL_NAME,
               'description': 'RAM and CPU channel',
               'field1': '%CPU',
               'field2': '%RAM',
@@ -67,7 +64,7 @@ def create_channel():
     cuerpo_encoded= urllib.parse.urlencode(cuerpo)
     #print(cuerpo_encoded)
     headers['Content-Length'] = str(len(cuerpo_encoded))
-    response = send_petition(method, uri, headers=headers, cuerpo=cuerpo_encoded)
+    response = requests.request(method, uri, headers=headers, data=cuerpo_encoded)
     codigo= response.status_code
     #print(codigo)
     if codigo==200:
@@ -88,10 +85,31 @@ def create_channel():
         file.close()
         print("[+] ID del canal y API de escritura copiadas al archivo 'id_and_key.txt' correctamente")
 
+def post_data():
+    while True:
+        print('[*] Subiendo %CPU y %RAM al canal creado... \n')
+        cpu_act, ram_act = cpu_ram()
+        method= 'POST'
+        uri= 'https://api.thingspeak.com/update.json'
+        headers= {'Host': 'api.thingspeak.com',
+                  'X-THINGSPEAKAPIKEY': write_key}
+        cuerpo= {'field1': cpu_act,
+                 'field2': ram_act}
+        response = requests.request(method, uri, headers=headers, data=cuerpo)
+        codigo=response.status_code
+        if codigo==200:
+            print('\n[+] Valores añadidos correctamente al canal. En 15 segundos se subirán nuevos valores')
+        else:
+            print('[-] Ha habido un error al subir los valores. Inténtalo de nuevo\n')
+            print('[!] Saliendo...\n')
+        time.sleep(15)
 
 
 if __name__=='__main__':
     signal.signal(signal.SIGINT, handler)
     print('\n[*] Creando canal...\n')
     create_channel()
+    post_data()
+
+
 
