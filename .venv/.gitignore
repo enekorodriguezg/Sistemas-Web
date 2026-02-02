@@ -1,0 +1,17 @@
+# created by virtualenv automatically
+# Entorno virtual (el que ya tienes)
+venv/
+.venv/
+env/
+
+# Archivos de configuración de PyCharm/IDE
+.idea/
+.vscode/
+
+# Python cache y temporales
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variables de entorno (Seguridad)
+.env
