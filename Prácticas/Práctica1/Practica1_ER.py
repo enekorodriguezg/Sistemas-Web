@@ -5,7 +5,7 @@ import requests,psutil,time,signal,sys,urllib
 
 # --- ENEKO RODRÍGUEZ G02 --- #
 
-
+# --- TO DO --> requisito B que si existe el canal, se trabaje con el ya existente. si se supera el limite de canales pare el programa pidiendo al usuario que borre alguno y despues escriba "listo" p.e.  ---
 API_KEY='U2LDYJQ1ATAV89X7'
 CHANNEL_NAME='ergCanal'
 channel_id= None
