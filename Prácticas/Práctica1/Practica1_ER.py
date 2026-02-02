@@ -1,17 +1,17 @@
 #-*- coding: UTF-8 -*-
-import urllib
+
+import requests,psutil,time,signal,sys,urllib
 
 # --- ENEKO RODRÍGUEZ G02 --- #
 
-import requests,psutil,time,signal,sys
 
-
-API_KEY='KC1DTLXZ8Q01Q34H'
+API_KEY='U2LDYJQ1ATAV89X7'
+channel_id= None
+write_key= None
 
 def handler(sig_num,frame):
     print('\n Saliendo...\n')
     sys.exit(0)
-
 
 
 def cpu_ram():
@@ -23,8 +23,10 @@ def cpu_ram():
 def send_petition(method, uri, headers, cuerpo,allow_red):
     return requests.request(method,uri,headers=headers,data=cuerpo, allow_redirects=allow_red)
 
-
 def create_channel():
+    global channel_id
+    global write_key
+
     method= 'POST'
 
     uri= 'https://api.thingspeak.com/channels.json'
@@ -41,7 +43,7 @@ def create_channel():
 
     cuerpo_encoded= urllib.parse.urlencode(cuerpo)
     #print(cuerpo_encoded)
-    headers['Content-Lenght'] = str(len(cuerpo_encoded))
+    headers['Content-Length'] = str(len(cuerpo_encoded))
     response = send_petition(method, uri, headers, cuerpo_encoded, False)
     codigo= response.status_code
     #print(codigo)
@@ -49,12 +51,17 @@ def create_channel():
         print('[+] Canal creado correctamente. Compruébalo en ThingSpeak')
     else:
         print(f"[-] Error al crear canal. Código de estado {codigo}")
-    '''
-    description= response.reason
-    print(description)
-    '''
-    response_cuerpo = response.content
-    print('Cuerpo de la respuesta: ' + str(response_cuerpo))
+
+    data=response.json()
+    channel_id=data.get('id')
+    write_key=next((k['api_key'] for k in data.get('api_keys', []) if k.get('write_flag')), None)
+
+
+    if channel_id!=None and write_key!=None:
+        file=open("channel_id_and_write_api_key.txt", "w")
+        file.write(str(channel_id))
+        file.write(write_key)
+        file.close()
 
 
 
