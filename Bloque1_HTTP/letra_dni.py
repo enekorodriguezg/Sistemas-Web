@@ -22,3 +22,4 @@ descripcion=respuesta.reason
 
 print(str(codigo)+' '+descripcion)
 
+print('Tu DNI con letra es: '+sys.argv[1]+respuesta.content.decode('utf-8'))
