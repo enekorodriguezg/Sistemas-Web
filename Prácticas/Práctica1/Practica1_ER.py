@@ -8,7 +8,7 @@ import requests,psutil,time,signal,sys,urllib
 
 # --- TO DO --> requisito B que si existe el canal, se trabaje con el ya existente. si se supera el limite de canales pare el programa pidiendo al usuario que borre alguno y despues escriba "listo" p.e.  ---
 API_KEY='U2LDYJQ1ATAV89X7'
-CHANNEL_NAME='test'
+CHANNEL_NAME='ergCanal'
 channel_id= None
 write_key= None
 
@@ -72,7 +72,8 @@ def create_channel():
         print('[+] Canal creado correctamente. Compruébalo en ThingSpeak')
     elif codigo==402:
         print("[-] Has llegado al límite de canales creados. Por favor, elimina alguno y vuelve a intentarlo")
-        exit(1)
+        listo=input("[!] Escribe 'Listo' cuando lo hayas hecho...\n")
+
     else:
         print(f"[-] Error al crear canal. Código de estado {codigo} {description}")
         sys.exit(1)
