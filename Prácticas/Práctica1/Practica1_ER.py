@@ -33,6 +33,9 @@ def check_channel():
 
     response = requests.request(method, uri, headers=headers, data=cuerpo)
     canales=response.json()
+    for canal in canales:
+        print(canal)
+
 
     for canal in canales:
         if canal.get('name') == CHANNEL_NAME:
@@ -40,11 +43,9 @@ def check_channel():
     return False
 
 def create_channel():
-
-    if check_channel():
-        print(f'[!] El canal {CHANNEL_NAME} ya existe.\nElimínelo manualmente por favor.\n\n[+] Esperando...\n')
-        while check_channel():
-            time.sleep(5)
+    id=check_channel()
+    if id!=NULL:
+        print(f'[!] El canal {CHANNEL_NAME} ya existe. Se utilizará el ya existente')
 
     global channel_id
     global write_key
@@ -124,6 +125,5 @@ if __name__=='__main__':
     print('\n[*] Creando canal...\n')
     create_channel()
     post_data()
-
 
 
