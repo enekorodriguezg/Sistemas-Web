@@ -1,12 +1,74 @@
-<!-- ENEKO RODRÍGUEZ G02 -->
+<!-- ENEKO RODRÍGUEZ - G02 -->
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-</body>
+    <script type="text/javascript">
+
+      google.charts.load('current', {'packages':['corechart']});
+
+      google.charts.setOnLoadCallback(initChart);
+
+      function initChart() {
+        fetchThingSpeakData();
+      }
+
+      function fetchThingSpeakData() {
+        var xhttp = new XMLHttpRequest();
+
+        var channelID = 3264959;
+        var uri = "https://api.thingspeak.com/channels/" + channelID + "/feeds.json?results=50";
+
+        xhttp.onreadystatechange = function() {
+
+          if (this.readyState == 4 && this.status == 200) {
+
+             var jsonResponse = JSON.parse(this.responseText);
+
+             drawChart(jsonResponse);
+          }
+        };
+
+        xhttp.open("GET", uri, true);
+
+        xhttp.send();
+      }
+
+      function drawChart(thingSpeakData) {
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Date');
+        data.addColumn('number', '%CPU');
+        data.addColumn('number', '%RAM');
+
+        var feeds = thingSpeakData.feeds;
+
+        for (var i = 0; i < feeds.length; i++) {
+            var date = feeds[i].created_at;
+            var cpu = parseFloat(feeds[i].field1);
+            var ram = parseFloat(feeds[i].field2);
+
+            data.addRow([date, cpu, ram]);
+        }
+
+        var options = {
+          title: 'Computer performance',
+          legend: { position: 'bottom' },
+          curveType: 'function',
+          colors: ['red', 'blue'],
+          series: {0: {targetAxisIndex: 0}, 1: {targetAxisIndex: 1}},
+          vAxes: {0: {title: '%CPU'}, 1: {title: '%RAM'}}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+  </body>
 </html>

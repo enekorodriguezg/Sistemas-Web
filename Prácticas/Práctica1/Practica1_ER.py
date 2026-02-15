@@ -124,7 +124,7 @@ def post_data():
         except:
             pass
 
-        time.sleep(15)
+        time.sleep(3)
 
 def get_last_100_json():
     method = 'GET'
