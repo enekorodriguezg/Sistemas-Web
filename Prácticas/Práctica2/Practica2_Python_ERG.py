@@ -3,6 +3,8 @@
 # FECHA ENTREGA# --- TO DO
 # PRÁCTICA 2#
 # DESCRIPCIÓN# -- TO DO
+import os
+from http.cookiejar import Cookie
 
 import requests, getpass, sys
 from bs4 import BeautifulSoup
@@ -40,7 +42,7 @@ def main():
     # SOLICITUD 1 - GET
     uri = 'https://egela.ehu.eus/login/index.php'
     headers = {'Host': 'egela.ehu.eus'}
-    log_info(f'\nSOLICITUD 1: {uri}')
+    log_info(f'SOLICITUD 1: {uri}')
 
     try:
         response = requests.get(uri, headers=headers)
@@ -125,7 +127,7 @@ def main():
     log_data(f'Location: {response.headers.get('Location', '')}\nSet-Cookie: {cookie}\n')
 
     # SOLICITUD 4 - GET
-    uri_final = 'https://egela.ehu.eus/'
+    uri_final = 'https://egela.ehu.eus/user/profile.php'
     headers = {
         'Host': 'egela.ehu.eus',
         'Cookie': cookie
@@ -146,14 +148,67 @@ def main():
     log_data(f'\nRESPUESTA 4:\n{code} {response.reason}')
     log_data(f'Location: {response.headers.get('Location', '')}\nSet-Cookie: {cookie}\n')
 
-    html = response.text.lower()
-    nombre_pila = full_name.split(' ')[0].lower()
+    html = response.text
 
-    if nombre_pila in html and 'logout.php' in html:
-        log_exito(f'Login correcto con el usuario {username}')
+    if full_name.lower() in html.lower():
+        log_exito(f'Login correcto con el usuario {username}\n')
+        os.system('pause')
     else:
         log_error(f'Login incorrecto con el usuario {username}')
         sys.exit(1)
+
+    soup = BeautifulSoup(html, 'html.parser')
+    enlace=soup.find('a', string=lambda texto: texto and 'sistemas web' in texto.lower())
+    if enlace:
+        uri_sw=enlace.get('href')
+        log_exito(f'URI extraida correctamente: {uri_sw}\n')
+    else:
+        log_error(f'No se encontró el enlace de la asignatura')
+        sys.exit(1)
+
+    # SOLICITUD 5 - GET
+
+    uri=uri_sw
+    headers= {'Host': 'egela.ehu.eus',
+              'Cookie': cookie}
+    try:
+        response=requests.get(uri, headers=headers)
+    except Exception as e:
+        log_error(f'Excepcion: {e}')
+        sys.exit(1)
+
+    code=response.status_code
+    if code != 200:
+        log_error('Error al realizar la solicitud')
+
+    html=response.text
+    soup=BeautifulSoup(html, 'html.parser')
+
+    apartados=soup.find('ul', class_='format_onetopic-tabs')
+    if not apartados:
+        log_error('Error al extraer los apartados')
+        sys.exit(1)
+
+    enlaces_apartados=apartados.find_all('a',class_='nav-link')
+    uris_apartados={}
+
+    log_info('APARTADOS:')
+    cont=1
+    for enlace in enlaces_apartados:
+        nombre=enlace.get('title')
+        uri=enlace.get('href')
+
+        if nombre and uri:
+            uris_apartados[nombre]=uri
+            print(f'{fg('green')}{cont}. {nombre}{attr('reset')}')
+            cont+=1
+
+    if not uris_apartados:
+        log_error('Error al extraer los apartados')
+        sys.exit(1)
+
+    log_info('DESCARGANDO .PDFs Y .PYs...')
+
 
 
 if __name__ == '__main__':
