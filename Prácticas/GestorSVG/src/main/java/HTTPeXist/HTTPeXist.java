@@ -111,16 +111,14 @@ public class HTTPeXist {
 		int status = 0;
 
 		System.out.println("ELIMINAR: "+resourceName+" de la colección "+collection);
-		URL url=new URL(this.server+"/exist/rest/db"+collection+"/"+resourceName);
+		URL url=new URL(this.server+"/exist/rest/"+XmldbURI.ROOT_COLLECTION_URI+"/"+collection+"/"+resourceName);
 		HttpURLConnection connect =  (HttpURLConnection) url.openConnection();
 		connect.setRequestMethod("DELETE");
-		connect.setDoOutput(true);
 		String codigoBase64=getAuthorizationCode("admin","eneko200505");
 		connect.setRequestProperty("Authorization", "Basic "+codigoBase64);
-
-
+		connect.connect();
+		status=connect.getResponseCode();
 		return status;
-
 	}
 
 	/*-->SUBIR recurso en un String */
