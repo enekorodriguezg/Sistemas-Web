@@ -14,7 +14,7 @@
 
 	<%	if (request.getAttribute("informacion") != null) {	%>
 	<section>
-		<font>Informaci�n:</font>
+		<font>Informacion:</font>
 		<%=request.getAttribute("informacion")%>
 	</section>
 	<% 	} %>
@@ -54,7 +54,7 @@
 	</section>
 	<section>
 	  <table><tr>
-	  	<td style="width:150px; background-color:#a7abad"><h4>Crear una nueva imagen SVG (en blanco) en una colecci�n</h4></td>
+	  	<td style="width:150px; background-color:#a7abad"><h4>Crear una nueva imagen SVG (en blanco) en una coleccion</h4></td>
 		<td style="width:600px">
 			<form id="ImagenNueva" method="GET" action="/GestorSVG/apiNI">
 				<table><tr>
@@ -120,7 +120,7 @@
 	
 	 <section>
 	  <table><tr>
-	  	<td style="width:150px; background-color:#a7abad"><h4>Sube una imagen SVG desde un archivo a un colecci�n</h4></td>
+	  	<td style="width:150px; background-color:#a7abad"><h4>Sube una imagen SVG desde un archivo a un coleccion</h4></td>
 		<td style="width:600px">
 	
 				<input type="file" id="fileInput" accept=".svg" /> 
