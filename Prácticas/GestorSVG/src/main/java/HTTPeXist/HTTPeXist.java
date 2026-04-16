@@ -36,7 +36,7 @@ public class HTTPeXist {
 		connect.setRequestMethod("GET");
 
 		/* Crear codigo de autorizacion y meter en la cabecera Authorization */
-		String codigoBase64 = getAuthorizationCode("admin", "admin");
+		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
 		connect.connect();
 		System.out.println("<--READ-status: " + connect.getResponseCode());
@@ -62,7 +62,7 @@ public class HTTPeXist {
 		HttpURLConnection connect = (HttpURLConnection) url.openConnection();
 		connect.setRequestMethod("GET");
 
-		String codigoBase64 = getAuthorizationCode("admin", "admin");
+		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
 		connect.connect();
 		System.out.println("<--LIST-status: " + connect.getResponseCode());
@@ -95,7 +95,7 @@ public class HTTPeXist {
 		connect.setRequestMethod("PUT");
 		connect.setDoOutput(true);
 
-		String codigoBase64 = getAuthorizationCode("admin", "admin");
+		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
 		connect.setRequestProperty("ContentType", "aplication/xml");
 
@@ -148,7 +148,7 @@ public class HTTPeXist {
 		connect.setRequestMethod("PUT");
 		connect.setDoOutput(true);
 
-		String codigoBase64 = getAuthorizationCode("admin", "admin");
+		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
 		connect.setRequestProperty("ContentType", "application/xml");
 
@@ -170,7 +170,7 @@ public class HTTPeXist {
 		HttpURLConnection connect = (HttpURLConnection) url.openConnection();
 		connect.setRequestMethod("DELETE");
 
-		String codigoBase64 = getAuthorizationCode("admin", "admin");
+		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
 		connect.connect();
 
@@ -186,7 +186,7 @@ public class HTTPeXist {
 		HttpURLConnection connect = (HttpURLConnection) url.openConnection();
 		connect.setRequestMethod("PUT");
 
-		String codigoBase64 = getAuthorizationCode("admin", "admin");
+		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
 		connect.connect();
 
