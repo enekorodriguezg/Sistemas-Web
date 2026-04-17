@@ -11,7 +11,7 @@ public class MySQLdb {
 	
 	//String url = "jdbc:mysql://localhost:3306/tu_base_de_datos?useSSL=false";
 	String user = "root";
-	String passwd = "Luz2022";
+	String passwd = "eneko200505";
 	String driver = "com.mysql.jdbc.Driver";
 
 	private Connection conn;

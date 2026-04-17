@@ -1,6 +1,6 @@
 package shareinfo;
 
-import jakarta.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSessionListener;
 
 import java.util.*;
 import javax.servlet.*;

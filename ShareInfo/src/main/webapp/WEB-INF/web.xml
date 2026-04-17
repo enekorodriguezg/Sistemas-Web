@@ -22,7 +22,7 @@
     <servlet-name>SignupServlet</servlet-name>
     <url-pattern>/servlet/SignupServlet</url-pattern>
   </servlet-mapping>
-
+    
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>shareinfo.LoginServlet</servlet-class>
@@ -40,4 +40,17 @@
     <servlet-name>MainServlet</servlet-name>
     <url-pattern>/servlet/MainServlet</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+      <servlet-name>TestServlet</servlet-name>
+      <servlet-class>shareinfo.TestServlet</servlet-class>
+  </servlet>  
+  <servlet-mapping>
+      <servlet-name>TestServlet</servlet-name>
+      <url-pattern>/servlet/TestServlet</url-pattern>
+  </servlet-mapping>
+
+  <session-config>
+      <session-timeout>2</session-timeout>
+  </session-config>
 </web-app>

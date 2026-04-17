@@ -6,12 +6,13 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import helper.db.*;
-import jakarta.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private MySQLdb mySQLdb;
+	private int numConexiones=0;
 	
 	public void init(ServletConfig config) {
 		System.out.println("---> Entrando en init()de LoginServlet");
@@ -22,6 +23,7 @@ public class LoginServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     	System.out.println("---> Entrando en doPost() de LoginServlet");
+		numConexiones++;
     	
     	request.setCharacterEncoding("UTF-8");
     	
@@ -66,5 +68,9 @@ public class LoginServlet extends HttpServlet {
 		
 		System.out.println("<--- Saliendo de doPost() en LoginServlet");
     }
+
+	public void destroy(){
+		System.out.println("---> El número de conexiones ha sido: "+numConexiones);
+	}
 }
 

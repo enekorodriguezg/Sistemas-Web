@@ -4,7 +4,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import helper.db.*;
-import jakarta.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 
 public class SignupServlet extends HttpServlet {
 	

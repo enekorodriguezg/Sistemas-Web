@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 
 import helper.db.*;
 import helper.info.*;
-import jakarta.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 
 public class MainServlet extends HttpServlet {
 
