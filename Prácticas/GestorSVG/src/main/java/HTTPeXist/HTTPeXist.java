@@ -60,9 +60,14 @@ public class HTTPeXist {
 		URL url = new URL(this.server + "/exist/rest" + XmldbURI.ROOT_COLLECTION_URI + "/" + encode(collection));
 		HttpURLConnection connect = (HttpURLConnection) url.openConnection();
 		connect.setRequestMethod("GET");
-
 		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
+
+		int status = connect.getResponseCode();
+		if (status != 200) {
+			System.out.println("<--LIST: La colección no existe (Status " + status + ")");
+			return null;
+		}
 
 		InputStream connectInputStream = connect.getInputStream();
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connectInputStream));

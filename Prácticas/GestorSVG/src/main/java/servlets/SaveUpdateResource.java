@@ -18,6 +18,7 @@ public class SaveUpdateResource extends HttpServlet {
 		String svgContent = request.getParameter("imagenSVG");
 		String accion = request.getParameter("actualizar_salva");
 
+		// DEBUG: Mira tu consola de Tomcat al pulsar el botón
 		System.out.println("DEBUG -> Coleccion: " + collection);
 		System.out.println("DEBUG -> Archivo: " + svgName);
 		System.out.println("DEBUG -> Acción: " + accion);
