@@ -1,83 +1,87 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="java.util.*" %>
 <%
-	// 1. CONTROL DE CACHÉ (Nivel Servidor)
-	// Esto evita los errores "Wrong attribute value" que te daba el IDE
+	// Control de caché para evitar errores del IDE y asegurar refresco
 	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma", "no-cache");
 	response.setDateHeader("Expires", 0);
 
-	// 2. CAPTURA DE ATRIBUTOS ENVIADOS POR EL SERVLET
 	String collection = (String) request.getAttribute("collection");
 	String svgName = (String) request.getAttribute("svgName");
 	String imagenSVG = (String) request.getAttribute("imagenSVG");
-	String imagenURI = (String) request.getAttribute("imagenURI");
-
-	// 3. GENERACIÓN DE TIMESTAMP (Evitamos 'System' por el error de compilación)
-	// Usamos new Date().getTime() que es equivalente
-	long timestamp = new java.util.Date().getTime();
-	String uriFinal = (imagenURI != null) ? imagenURI + "?v=" + timestamp : "";
+	String imagenURI = (String) request.getAttribute("imagenURI") + "?nocache=" + new java.util.Date().getTime();
 %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="utf-8">
-	<title>Edición SVG: <%= svgName %></title>
-	<%-- CSS con ruta absoluta para evitar errores de carga --%>
+	<title>Edición SVG - <%=svgName%></title>
 	<link href="<%= request.getContextPath() %>/css/styleSheet.css" rel="stylesheet">
 </head>
 <body>
 <header>
 	<h1>Gestor Imágenes SVG en eXist - SW-2026</h1>
-	<h3>Edición de la imagen: <%= svgName %></h3>
+	<h3>Edición de la imagen: <%=svgName%></h3>
 </header>
 
 <nav class="menu">
-	<%-- Enlace a inicio --%>
 	<a href="<%= request.getContextPath() %>/jsp/index.jsp"> Inicio </a>
-
-	<%-- Volver a la lista usando GET para evitar el error 405 --%>
-	<a href="javascript:void(0);" onclick="document.getElementById('backform').submit();" style="color:white; text-decoration:underline;">Volver a la lista</a>
+	<a href="javascript:void(0);" onclick="document.getElementById('backform').submit();">Atrás</a>
 </nav>
 
-<%-- Formulario oculto para navegar atrás --%>
 <form id="backform" method="GET" action="<%= request.getContextPath() %>/apiLR">
-	<input type="hidden" name="collection" value="<%= collection %>" />
+	<input type="hidden" name="collection" value="<%=collection%>" />
 </form>
 
 <table style="width:100%" class="edicion">
 	<tr class="edicion">
 		<th class="edicion">Imagen Original</th>
-		<th class="edicion">Código Fuente SVG (Editable)</th>
+		<th class="edicion">Imagen Modificada (Vista Previa)</th>
+		<th class="edicion">SRC (Código Fuente)</th>
 	</tr>
 	<tr class="edicion">
 		<td class="edicion">
-			<%-- Visualización del SVG --%>
-			<object class="edicion" data="<%= uriFinal %>" type="image/svg+xml" style="min-height:300px; width:100%; border:1px solid #444;">
-				Su navegador no soporta visualización de SVG.
-			</object>
+			<object class="edicion" data="<%=imagenURI%>" type="image/svg+xml"></object>
 		</td>
 		<td class="edicion">
-			<%-- Formulario para guardar cambios --%>
+			<%-- Contenedor donde JavaScript inyectará el SVG modificado --%>
+			<div id="previewSVG">
+				<%=imagenSVG%>
+			</div>
+		</td>
+		<td class="edicion">
 			<form id="formulario" method="POST" action="<%= request.getContextPath() %>/appSaveUpdate">
-				<input type="hidden" name="collection" value="<%= collection %>" />
-				<input type="hidden" name="svgName" value="<%= svgName %>" />
-				<textarea class="input-field" name="imagenSVG" wrap="soft" rows="25" cols="80"
-						  style="font-family:monospace; font-size:12px; background:#f4f4f4;"><%= imagenSVG %></textarea>
+				<input type="hidden" name="collection" value="<%=collection%>" />
+				<input type="hidden" name="svgName" value="<%=svgName%>" />
+				<%-- He añadido el id="textareaSVG" para que JS lo encuentre --%>
+				<textarea class="input-field" name="imagenSVG" wrap="soft" id="textareaSVG"
+						  rows="20" cols="80"><%=imagenSVG%></textarea>
 			</form>
 		</td>
 	</tr>
 </table>
 
 <nav class="menu">
-	<label for="opciones">Acción:</label>
+	<label for="opciones"></label>
 	<select id="opciones" name="actualizar_salva" form="formulario">
-		<option value="update">Actualizar (Sobreescribir)</option>
+		<option value="update">Actualizar</option>
 		<option value="save">Guardar como copia</option>
 	</select>
-	<button type="submit" form="formulario">Guardar Cambios</button>
+	<button type="submit" form="formulario">Actualizar/Guardar</button>
 </nav>
 
 <footer><h5>Sistemas Web - Escuela Ingeniería de Bilbao - EHU</h5></footer>
+
+<%-- BLOQUE JAVASCRIPT: La magia para el cambio en tiempo real --%>
+<script>
+	const editor = document.getElementById('textareaSVG');
+	const vistaPrevia = document.getElementById('previewSVG');
+
+	// Escuchamos cada vez que el usuario teclea (input)
+	editor.addEventListener('input', function() {
+		// Inyectamos el contenido del textarea directamente en la columna central
+		vistaPrevia.innerHTML = this.value;
+	});
+</script>
 </body>
 </html>

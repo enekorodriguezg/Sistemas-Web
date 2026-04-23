@@ -1,65 +1,63 @@
 package servlets;
 
 import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import HTTPeXist.HTTPeXist;
 
 public class SaveUpdateResource extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public SaveUpdateResource() {
-		super();
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String collection = request.getParameter("collection");
+		String svgName = request.getParameter("svgName");
+		String svgContent = request.getParameter("imagenSVG");
+		String accion = request.getParameter("actualizar_salva");
+
+		// DEBUG: Mira tu consola de Tomcat al pulsar el botón
+		System.out.println("DEBUG -> Coleccion: " + collection);
+		System.out.println("DEBUG -> Archivo: " + svgName);
+		System.out.println("DEBUG -> Acción: " + accion);
+
+		if (collection == null || svgName == null || svgContent == null) {
+			response.sendRedirect(request.getContextPath() + "/jsp/index.jsp");
+			return;
+		}
+
+		try {
+			HTTPeXist api = new HTTPeXist("http://localhost:8080");
+			String nombreDestino = svgName;
+
+			// Lógica de ramificación
+			if ("save".equals(accion)) {
+				nombreDestino = "copia_" + svgName;
+			}
+
+			int status = api.subirString(collection, svgContent, nombreDestino);
+
+			if (status >= 200 && status < 300) {
+				request.setAttribute("informacion", "Éxito: Imagen guardada como '" + nombreDestino + "'");
+			} else {
+				request.setAttribute("informacion", "Error de eXist-db: " + status);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("informacion", "Excepción: " + e.getMessage());
+		}
+
+		// REDIRECCIÓN CON CACHE-BUSTER: Forzamos a la lista a refrescarse
+		// Al añadir el parámetro 't', engañamos al navegador para que pida la lista de nuevo
+		request.getRequestDispatcher("/apiLR?collection=" + collection + "&t=" + System.currentTimeMillis())
+				.forward(request, response);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		doPost(request, response);
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HTTPeXist eXist = new HTTPeXist("http://localHost:8080");
-
-		String collection = request.getParameter("collection");
-		String svgName = request.getParameter("svgName");
-		String imagenSVG = request.getParameter("imagenSVG");
-		String opcion = request.getParameter("actualizar_salva");
-
-		System.out.println("Servlet- DatosXML " + collection);
-		System.out.println("Servlet- DatosXML " + svgName);
-		System.out.println("Servlet- DatosXML " + imagenSVG);
-		System.out.println("Opciones " + opcion);
-		request.setAttribute("collection", collection);
-		request.setAttribute("svgName", svgName);
-		request.setAttribute("imagenSVG", imagenSVG);
-
-		String imagenURI = "http://localhost:8080/exist/rest/db/" + collection + "/" + svgName + "/";
-		request.setAttribute("imagenURI", imagenURI);
-
-		if (opcion.equals("save")) {
-			int a = eXist.subirString(collection, imagenSVG, svgName);
-			System.out.println("    Salvado" + a);
-//			try {
-//				Thread.sleep(2 * 1000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		}
-
-		System.out.println("     Redireccionando a imagenEdit.jsp");
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/imagenEdit.jsp");
-		response.setHeader("Cache-Control", "no-cache");
-		response.setDateHeader("Expires", 0);
-		rd.forward(request, response);
-		
-
-	}
-
 }
