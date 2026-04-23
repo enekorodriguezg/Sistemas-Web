@@ -8,7 +8,7 @@
 <html lang="es">
 	<head>
 	   <title>Lista SVGs</title>
-	   <link href="/GestorSvg/css/styleSheet.css" rel="stylesheet" />
+		<link href="<%= request.getContextPath() %>/css/styleSheet.css" rel="stylesheet" />
 	</head>
 	<body>
 		<header>
@@ -17,19 +17,19 @@
 		</header>
 		
 		<nav class="menu">
-			<a href="./jsp/index.jsp"> Inicio </a>
+			<a href="<%= request.getContextPath() %>"> Inicio </a>
 		</nav>
 		<%
 			for (Map.Entry<String, String> entry : svgList.entrySet()) {
 		%>
 		<section><table><tr>
 		  <td><h3><%=entry.getKey()%></h3></td>
-			<td><form  method='get' action='./apiEdit'>
+			<td><form method='get' action='<%= request.getContextPath() %>/apiEdit'>
 					<%="<input type='hidden' name='collection' value='" + collection + "'/>"%>
 					<%="<input type='hidden' name='svgName' value='" + entry.getKey() + "'/>"%>
 					<button type='submit'>Edit</button>			
 			</form> </td>
-			<td><form  method='get' action='./apiDelete'>
+			<td><form method='get' action='<%= request.getContextPath() %>/apiDelete'>
 					<%="<input type='hidden' name='collection' value='" + collection + "'/>"%>
 					<%="<input type='hidden' name='svgName' value='"+ entry.getKey() + "'/>"%>
 						<button type='submit'>Delete</button>	
