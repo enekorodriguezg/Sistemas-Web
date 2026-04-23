@@ -3,7 +3,6 @@
 <html lang="es">
 <head>
 	<title>Gestor SVG</title>
-	<%-- Ruta absoluta para el CSS --%>
 	<link href="<%= request.getContextPath() %>/css/styleSheet.css" rel="stylesheet">
 	<meta charset="utf-8">
 </head>

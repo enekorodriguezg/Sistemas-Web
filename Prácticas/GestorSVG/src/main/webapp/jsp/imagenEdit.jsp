@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="java.util.*" %>
 <%
-	// Control de caché para evitar errores del IDE y asegurar refresco
 	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma", "no-cache");
 	response.setDateHeader("Expires", 0);
@@ -72,14 +71,12 @@
 
 <footer><h5>Sistemas Web - Escuela Ingeniería de Bilbao - EHU</h5></footer>
 
-<%-- BLOQUE JAVASCRIPT: La magia para el cambio en tiempo real --%>
 <script>
 	const editor = document.getElementById('textareaSVG');
 	const vistaPrevia = document.getElementById('previewSVG');
 
 	// Escuchamos cada vez que el usuario teclea (input)
 	editor.addEventListener('input', function() {
-		// Inyectamos el contenido del textarea directamente en la columna central
 		vistaPrevia.innerHTML = this.value;
 	});
 </script>

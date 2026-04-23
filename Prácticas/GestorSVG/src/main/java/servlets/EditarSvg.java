@@ -29,7 +29,6 @@ public class EditarSvg extends HttpServlet {
 		String collection= request.getParameter("collection");
 		String svgName = request.getParameter("svgName");
 		
-		//HTTPeXist eXist = new HTTPeXist("http://localHost:8080");
 		String imagenSVG= eXist.read(collection, svgName);
 		
 		request.setAttribute("collection",collection);

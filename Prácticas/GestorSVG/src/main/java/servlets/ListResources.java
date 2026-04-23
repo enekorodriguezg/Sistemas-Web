@@ -82,7 +82,6 @@ public class ListResources extends HttpServlet {
 
 	private static Document convertStringToXMLDocument(String xmlString) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		// IMPORTANTE: Hacerlo tolerante a namespaces para eXist-db
 		factory.setNamespaceAware(true);
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();

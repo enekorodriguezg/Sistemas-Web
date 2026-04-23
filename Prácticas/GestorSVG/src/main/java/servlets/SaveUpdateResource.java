@@ -18,7 +18,6 @@ public class SaveUpdateResource extends HttpServlet {
 		String svgContent = request.getParameter("imagenSVG");
 		String accion = request.getParameter("actualizar_salva");
 
-		// DEBUG: Mira tu consola de Tomcat al pulsar el botón
 		System.out.println("DEBUG -> Coleccion: " + collection);
 		System.out.println("DEBUG -> Archivo: " + svgName);
 		System.out.println("DEBUG -> Acción: " + accion);
@@ -50,8 +49,7 @@ public class SaveUpdateResource extends HttpServlet {
 			request.setAttribute("informacion", "Excepción: " + e.getMessage());
 		}
 
-		// REDIRECCIÓN CON CACHE-BUSTER: Forzamos a la lista a refrescarse
-		// Al añadir el parámetro 't', engañamos al navegador para que pida la lista de nuevo
+		// REDIRECCIÓN CON CACHE-BUSTER
 		request.getRequestDispatcher("/apiLR?collection=" + collection + "&t=" + System.currentTimeMillis())
 				.forward(request, response);
 	}

@@ -29,7 +29,6 @@ public class HTTPeXist {
 		this.server = server;
 	}
 
-	// El escudo contra el error "Illegal character in URL"
 	private String encode(String pathSegment) throws UnsupportedEncodingException {
 		if (pathSegment == null) return "";
 		return URLEncoder.encode(pathSegment, "UTF-8").replace("+", "%20");
@@ -87,7 +86,6 @@ public class HTTPeXist {
 
 		String codigoBase64 = getAuthorizationCode("admin", "eneko200505");
 		connect.setRequestProperty("Authorization", "Basic " + codigoBase64);
-		// CORREGIDO: Content-Type (con guion)
 		connect.setRequestProperty("Content-Type", "application/xml");
 
 		StringBuilder postData = new StringBuilder();
@@ -144,7 +142,7 @@ public class HTTPeXist {
 		return connect.getResponseCode();
 	}
 
-	/*-->CORREGIDO: CREATE ahora crea una colección real usando XQuery */
+	/*  -->CREATE crea una colección */
 	public int create(String collection) throws IOException {
 		// Para crear una carpeta (colección), usamos la función de administración de eXist
 		String query = "xmldb:create-collection('/db', '" + collection + "')";

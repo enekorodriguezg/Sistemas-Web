@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import HTTPeXist.HTTPeXist;
 
-// ¡SIN ANOTACIÓN @WebServlet! El web.xml de la profesora se encarga del enrutamiento.
 public class CreateCollection extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

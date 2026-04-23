@@ -40,7 +40,7 @@ public class DeleteSvg extends HttpServlet {
             request.setAttribute("informacion", "Excepción al eliminar: " + e.getMessage());
         }
 
-        // 4. REDIRECCIÓN CRÍTICA: Volvemos a la lista de la colección
+        // 4. Volvemos a la lista de la colección
         // Usamos un Forward al servlet ListResources (/apiLR) para que la lista se refresque
         request.getRequestDispatcher("/apiLR?collection=" + collection).forward(request, response);
     }

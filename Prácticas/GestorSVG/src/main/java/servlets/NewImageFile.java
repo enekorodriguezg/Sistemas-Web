@@ -13,12 +13,12 @@ public class NewImageFile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Capturar los datos. "imagenSVG" viene del input oculto que rellenó Javascript
+        // 1. Capturar los datos.
         String svgName = request.getParameter("svgName");
         String collection = request.getParameter("collection");
         String svgContent = request.getParameter("imagenSVG");
 
-        // 2. Validación crítica
+        // 2. Validación
         if (svgContent == null || svgContent.trim().isEmpty()) {
             request.setAttribute("informacion", "Error: Archivo vacío. ¿Olvidaste pulsar 'Leer Archivo' antes de enviar?");
             request.getRequestDispatcher("/jsp/index.jsp").forward(request, response);
@@ -32,7 +32,7 @@ public class NewImageFile extends HttpServlet {
         }
 
         try {
-            // 3. Ejecutar la subida utilizando el orden de parámetros que corregimos (Colección, Contenido, Nombre)
+            // 3. Ejecutar la subida
             HTTPeXist api = new HTTPeXist("http://localhost:8080");
             int status = api.subirString(collection, svgContent, svgName);
 
