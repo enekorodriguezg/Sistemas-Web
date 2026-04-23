@@ -1,0 +1,49 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Ignorar archivos específicos de la carpeta .idea si decides subirla
+# (Generalmente es mejor ignorar la carpeta completa, pero estas son excepciones comunes)
+out/
+gen/
+.idea/libraries/
+.idea/usage.statistics.xml
+.idea/dictionaries/
+.idea/shelf/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/datasources/
+.idea/datasources.xml
+.idea/datasources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+
+# Archivos temporales de edición
+.idea/modules.xml
+.idea/modules/
+*.clog
+
+### Artefactos de compilación comunes ###
+# Java
+*.class
+*.log
+*.jar
+*.war
+*.ear
+target/
+build/
+
+### Logs y Temporales ###
+*.log
+/log
+/logs
+tmp/
+.tmp/
+
+### OS Files ###
+.DS_Store
+Thumbs.db
